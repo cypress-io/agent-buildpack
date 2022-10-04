@@ -1,0 +1,31 @@
+integrations:
+  agent:
+    enabled: true
+metrics:
+  wal_directory: /tmp/grafana-agent-wal
+  configs:
+    - name: herokue_app_metrics
+      scrape_configs:
+        - job_name: heroku_buildpack_grafana_agent
+          honor_labels: true
+          scheme: http
+          metrics_path: /prometheus-instrumentation/metrics
+          params:
+            metricsKey: [${GRAFANA_AGENT_DASHBOARD_METRICS_KEY}]
+          static_configs:
+            - targets:
+                - localhost:${PORT}
+              labels:
+                env: ${GRAFANA_AGENT_ENV:-dev}
+                heroku_app_name: ${HEROKU_APP_NAME}
+                heroku_app_id: ${HEROKU_APP_ID}
+                heroku_dyno_id: ${HEROKU_DYNO_ID}
+  global:
+    scrape_interval: ${GRAFANA_AGENT_SCRAPE_INTERVAL:-20s}
+    remote_write:
+      - url: ${GRAFANA_AGENT_PROMETHEUS_REMOTE_WRITE_URL}
+        basic_auth:
+          username: ${GRAFANA_AGENT_PROMETHEUS_REMOTE_WRITE_USERNAME}
+          password: ${GRAFANA_AGENT_PROMETHEUS_REMOTE_WRITE_PASSWORD}
+server:
+  log_level: ${GRAFANA_AGENT_LOG_LEVEL:-debug}
