@@ -4,7 +4,7 @@ integrations:
 metrics:
   wal_directory: /tmp/grafana-agent-wal
   configs:
-    - name: herokue_app_metrics
+    - name: heroku_app_metrics
       scrape_configs:
         - job_name: heroku_buildpack_grafana_agent
           honor_labels: true
