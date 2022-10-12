@@ -16,10 +16,9 @@ metrics:
             - targets:
                 - localhost:${PORT}
               labels:
-                env: ${GRAFANA_AGENT_ENV:-dev}
+                env: ${GRAFANA_AGENT_ENV:-default}
                 heroku_app_name: ${HEROKU_APP_NAME}
-                heroku_app_id: ${HEROKU_APP_ID}
-                heroku_dyno_id: ${HEROKU_DYNO_ID}
+                heroku_dyno_name: ${DYNO}
   global:
     scrape_interval: ${GRAFANA_AGENT_SCRAPE_INTERVAL:-20s}
     remote_write:
