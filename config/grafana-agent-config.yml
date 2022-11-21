@@ -12,6 +12,34 @@ metrics:
           metrics_path: /prometheus-instrumentation/metrics
           params:
             metricsKey: [${GRAFANA_AGENT_DASHBOARD_METRICS_KEY}]
+          metric_relabel_configs:
+            - source_labels: [__name__]
+              regex: '^http_.*$'
+              action: drop
+          static_configs:
+            - targets:
+                - localhost:${PORT}
+              labels:
+                env: ${GRAFANA_AGENT_ENV:-default}
+                heroku_app_name: ${HEROKU_APP_NAME}
+                heroku_dyno_name: ${DYNO}
+
+        - job_name: heroku_buildpack_grafana_agent_http_metrics
+          honor_labels: true
+          scheme: http
+          metrics_path: /prometheus-instrumentation/metrics
+          params:
+            metricsKey: [${GRAFANA_AGENT_DASHBOARD_METRICS_KEY}]
+          # Metrics that match recording service paths
+          metric_relabel_configs:
+            - source_labels: [path]
+              regex: '(/runs$|/runs/#val/instances$|/instances/#val/stdout$|/instances/#val/tests$|/instances/#val$)'
+              action: keep
+          # Metrics that match auth service paths
+          metric_relabel_configs:
+            - source_labels: [path]
+              regex: '(/auth/login$|/login$|/login/local$|/login/dashboard-session$|/sso/discover$|/login/saml/#val$|/login/waad/#val$|/login/saml/#val$|/login/waad/#val$)'
+              action: keep
           static_configs:
             - targets:
                 - localhost:${PORT}
