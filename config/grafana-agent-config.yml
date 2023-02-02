@@ -20,9 +20,7 @@ metrics:
             - targets:
                 - localhost:${PORT}
               labels:
-                env: ${GRAFANA_AGENT_ENV:-default}
-                heroku_app_name: ${HEROKU_APP_NAME}
-                heroku_dyno_name: ${DYNO}
+                instance: ${DYNO}
 
         - job_name: heroku_recording_service_http_metrics
           honor_labels: true
@@ -38,9 +36,7 @@ metrics:
             - targets:
                 - localhost:${PORT}
               labels:
-                env: ${GRAFANA_AGENT_ENV:-default}
-                heroku_app_name: ${HEROKU_APP_NAME}
-                heroku_dyno_name: ${DYNO}
+                instance: ${DYNO}
 
         - job_name: heroku_auth_service_http_metrics
           honor_labels: true
@@ -56,9 +52,7 @@ metrics:
             - targets:
                 - localhost:${PORT}
               labels:
-                env: ${GRAFANA_AGENT_ENV:-default}
-                heroku_app_name: ${HEROKU_APP_NAME}
-                heroku_dyno_name: ${DYNO}
+                instance: ${DYNO}
   global:
     scrape_interval: ${GRAFANA_AGENT_SCRAPE_INTERVAL:-20s}
     remote_write:
